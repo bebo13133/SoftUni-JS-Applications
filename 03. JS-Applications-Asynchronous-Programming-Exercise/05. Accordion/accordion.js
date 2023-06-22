@@ -35,8 +35,6 @@ pElem.textContent = dataRes.content
 
 extra.style.display = hidden ? "block": 'none'
 e.target.textContent = hidden? 'Less' : 'More'
-
-
 }
 
     function createElement(type, content, className, idName) {
