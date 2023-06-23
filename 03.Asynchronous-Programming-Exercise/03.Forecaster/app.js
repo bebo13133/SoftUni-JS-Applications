@@ -11,8 +11,6 @@ function attachEvents() {
         'Rain': '&#x2614', // ☂
         'Degrees': '&#176',
     }
-
-
     function onLoad() {
         fetch(urlLocation)
             .then(response => { return response.json() })
@@ -27,7 +25,6 @@ function attachEvents() {
                 fetch(urlToday)
                     .then(response => response.json())
                     .then(dataToday => {
-                       
                         const forestDiv = createElement('div', '', 'forecasts')
                         let spnSymbol = createElement('span', '', ('condition', 'symbol'), symbols[dataToday.forecast.condition]);
                         const conditionSpan = createElement('span', '', 'condition');
@@ -42,7 +39,7 @@ function attachEvents() {
                         fetch(threeDaysUrl)
                         .then(response => response.json())
                         .then(dataLine=>{
-                            console.log(dataLine)
+                           
                             const divInfo = createElement('div','','forecast-info')
                             dataLine.forecast.forEach(el=>{
                          
@@ -56,8 +53,7 @@ function attachEvents() {
                             append(upComingSpan,spanSymbol,span1,span2)
                             append(divInfo,upComingSpan)
                             return divInfo
-                            })
-
+                            });
                             append(upcomingWeather, divInfo)
                         })
                     })
