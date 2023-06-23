@@ -16,7 +16,7 @@ function attachEvents() {
             .then(response => { return response.json() })
             .then(data => {   
                 let findLocation = data.find(x => x.name === location.value)
-                if (findLocation == undefined) throw new Error()
+                if (findLocation == undefined) throw new Error();
                 foreCast.style.display = 'block'
 
                 let code = findLocation.code
@@ -54,8 +54,11 @@ function attachEvents() {
                             });
                             append(upcomingWeather, divInfo)
                         })
+                    
                     })
+                  
             })
+            .catch((e)=>foreCast.textContent="Error")
     }
     function createElement(type, content, className, weatherSymbol) {
         let element = document.createElement(type);
