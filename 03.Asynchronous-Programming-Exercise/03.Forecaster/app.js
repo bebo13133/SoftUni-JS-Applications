@@ -29,8 +29,7 @@ function attachEvents() {
                         let spnSymbol = createElement('span', '', ('condition', 'symbol'), symbols[dataToday.forecast.condition]);
                         const conditionSpan = createElement('span', '', 'condition');
                         const span1 = createElement('span', dataToday.name, 'forecast-data');
-                        const span2 = createElement('span', '', 'forecast-data')
-                        span2.innerHTML = `${dataToday.forecast.low}&#176;/${dataToday.forecast.high}&#176;`;
+                        const span2 = createElement('span', '', 'forecast-data',`${dataToday.forecast.low}&#176;/${dataToday.forecast.high}&#176;`)
                         const span3 = createElement('span', dataToday.forecast.condition, 'forecast-data');
                         append(conditionSpan, span1, span2, span3);
                         append(forestDiv, spnSymbol, conditionSpan);
@@ -45,8 +44,7 @@ function attachEvents() {
                          
                             const upComingSpan = createElement('span', '','upcoming')
                             let spanSymbol = createElement('span', '',  'symbol', symbols[el.condition])
-                            let span1 = createElement('span','','forecast-data')
-                            span1.innerHTML = `${el.low}&#176;/${el.high}&#176;`;
+                            let span1 = createElement('span','','forecast-data',`${el.low}&#176;/${el.high}&#176;`)
                             let span2 = createElement('span', el.condition, 'forecast-data');
 
                      
