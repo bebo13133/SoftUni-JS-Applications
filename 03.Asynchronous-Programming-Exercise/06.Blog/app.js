@@ -36,6 +36,9 @@ async function attachEvents() {
 
 attachEvents();
 
+
+
+
 // Вариант 2 
 function attachEvents() {
     const [postBtn, posts, viewBtn, comments] = ['#btnLoadPosts', '#posts', "#btnViewPost", '#post-comments']
@@ -63,7 +66,6 @@ function attachEvents() {
         ]);
         const data = await res.json();
         comments.innerHTML = "";
-        let postTitle = posts.querySelector("option:checked");
         document.getElementById('post-title').textContent = posts.options[posts.selectedIndex].text
         document.getElementById('post-body').textContent = postbody
         const dataComments = await comment.json();
