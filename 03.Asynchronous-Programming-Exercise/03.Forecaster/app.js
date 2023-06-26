@@ -14,7 +14,7 @@ function attachEvents() {
     function onLoad() {
         fetch(urlLocation)
             .then(response => { return response.json() })
-            .then(data => {   
+            .then(data => {
                 let findLocation = data.find(x => x.name === location.value)
                 if (findLocation == undefined) throw new Error();
                 foreCast.style.display = 'block'
@@ -29,36 +29,36 @@ function attachEvents() {
                         let spnSymbol = createElement('span', '', ('condition', 'symbol'), symbols[dataToday.forecast.condition]);
                         const conditionSpan = createElement('span', '', 'condition');
                         const span1 = createElement('span', dataToday.name, 'forecast-data');
-                        const span2 = createElement('span', '', 'forecast-data',`${dataToday.forecast.low}&#176;/${dataToday.forecast.high}&#176;`)
+                        const span2 = createElement('span', '', 'forecast-data', `${dataToday.forecast.low}&#176;/${dataToday.forecast.high}&#176;`)
                         const span3 = createElement('span', dataToday.forecast.condition, 'forecast-data');
                         append(conditionSpan, span1, span2, span3);
                         append(forestDiv, spnSymbol, conditionSpan);
                         append(currentWeather, forestDiv);
 
                         fetch(threeDaysUrl)
-                        .then(response => response.json())
-                        .then(dataLine=>{
-                           
-                            const divInfo = createElement('div','','forecast-info')
-                            dataLine.forecast.forEach(el=>{
-                         
-                            const upComingSpan = createElement('span', '','upcoming')
-                            let spanSymbol = createElement('span', '',  'symbol', symbols[el.condition])
-                            let span1 = createElement('span','','forecast-data',`${el.low}&#176;/${el.high}&#176;`)
-                            let span2 = createElement('span', el.condition, 'forecast-data');
+                            .then(response => response.json())
+                            .then(dataLine => {
 
-                     
-                            append(upComingSpan,spanSymbol,span1,span2)
-                            append(divInfo,upComingSpan)
-                            return divInfo
-                            });
-                            append(upcomingWeather, divInfo)
-                        })
-                    
+                                const divInfo = createElement('div', '', 'forecast-info')
+                                dataLine.forecast.forEach(el => {
+
+                                    const upComingSpan = createElement('span', '', 'upcoming')
+                                    let spanSymbol = createElement('span', '', 'symbol', symbols[el.condition])
+                                    let span1 = createElement('span', '', 'forecast-data', `${el.low}&#176;/${el.high}&#176;`)
+                                    let span2 = createElement('span', el.condition, 'forecast-data');
+
+
+                                    append(upComingSpan, spanSymbol, span1, span2)
+                                    append(divInfo, upComingSpan)
+                                    return divInfo
+                                });
+                                append(upcomingWeather, divInfo)
+                            })
+
                     })
-                  
+
             })
-            .catch((e)=>foreCast.textContent="Error")
+            .catch((e) => foreCast.textContent = "Error")
     }
     function createElement(type, content, className, weatherSymbol) {
         let element = document.createElement(type);
