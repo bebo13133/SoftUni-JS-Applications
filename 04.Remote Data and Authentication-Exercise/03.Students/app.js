@@ -1,9 +1,7 @@
 
 const url = `http://localhost:3030/jsonstore/collections/students`
-
 const tbody = document.querySelector('#results tbody')
 const form = document.querySelector('form')
-
 window.addEventListener('load', onLoad)
 form.addEventListener('submit', onCheck)
 
@@ -12,10 +10,8 @@ function onCheck(e) {
     const formData = new FormData(e.target)
     onSubmit([...formData.entries()].reduce((acc, [k, v]) => Object.assign(acc, { [k]: v }), {}))
 }
-
 async function onLoad() {
     tbody.innerHTML = ''
-
     try {
         const response = await fetch(url)
         if (!response.ok) {
@@ -27,11 +23,7 @@ async function onLoad() {
     } catch (e) {
 
     }
-
 }
-
-
-
     async function onSubmit(data) {
         if(data.firstName === '' || data.lastName === '' || data.facultyNumber === '' || data.grade === '' || isNaN(data.facultyNumber) || isNaN(data.grade)){
             alert('Please enter a valid input');
@@ -79,7 +71,6 @@ async function onLoad() {
         tr.appendChild(th2);
         tr.appendChild(th3);
         tr.appendChild(th4);
-    
         tbody.appendChild(tr);
     }
 
