@@ -1,21 +1,12 @@
-// window.addEventListener('load', onLoad)
-
-// document.querySelectorAll('a').forEach(element => element.classList.remove('active'));
-// document.getElementById('home').classList.add('active');
-
 const catches = document.getElementById('catches');
 const formAdd = document.querySelector("#addForm")
 const addBtn = document.querySelector('.add')
 
 const loadBtn = document.querySelector('.load');
 loadBtn.addEventListener('click', loadCatches)
-
-
-// function onLoad(e) {
-    let dataUser = null;
-    
-   dataUser = JSON.parse(sessionStorage.getItem('dataUser'))
-  catches.innerHTML = '';
+let dataUser = null;
+dataUser = JSON.parse(sessionStorage.getItem('dataUser'))
+catches.innerHTML = '';
 if (dataUser !== null) {
     document.getElementById('user').style.display = "inline-block"
     document.getElementById('guest').style.display = "none"
@@ -27,23 +18,17 @@ if (dataUser !== null) {
     document.getElementById('user').style.display = 'none'
     document.getElementById('guest').style.display = "inline-block"
 }
-//  }
 async function loadCatches() {
     const url = `http://localhost:3030/data/catches`
     const response = await fetch(url)
     const data = await response.json()
-
     document.getElementById('catches').replaceChildren(...data.map(createInfo));
-    
-
 }
-
 document.querySelector('#main').addEventListener('click', onButtons)
-
 function onButtons(e) {
     if (e.target.nodeName != 'BUTTON') {
         return;
-      }
+    }
     const currentBtn = e.target.textContent
     const id = e.target.parentElement.getAttribute('data-id');
     const currentEl = e.target.parentElement
@@ -52,31 +37,27 @@ function onButtons(e) {
     } else if (currentBtn === 'Update') {
         onUpdate(id, currentEl)
     }
-
- }
+}
 async function onDelete(id) {
     const url = `http://localhost:3030/data/catches/${id}`
 
-try{
-
-    const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Authorization': dataUser.accessToken
-        },
-    })
-    const data = await response.json()
-    loadCatches()
-}catch(e){
-    alert(e.message)
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Authorization': dataUser.accessToken
+            },
+        })
+        await response.json()
+        loadCatches()
+    } catch (e) {
+        alert(e.message)
+    }
 }
-}
-
 async function onUpdate(id, currentEl) {
     let [angler, weight, species, location, bait, captureTime] = currentEl.querySelectorAll('input')
     const url = `http://localhost:3030/data/catches/${id}`
-
     const body = JSON.stringify({
         angler: angler.value,
         weight: Number(weight.value),
@@ -85,7 +66,6 @@ async function onUpdate(id, currentEl) {
         bait: bait.value,
         captureTime: Number(captureTime.value)
     })
-
     try {
         const response = await fetch(url, {
             method: 'PUT',
@@ -99,10 +79,8 @@ async function onUpdate(id, currentEl) {
         if (!response.ok) throw new Error(data.message)
         loadCatches()
     } catch (e) {
-
         alert(e.message)
     }
-
 }
 formAdd.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -124,7 +102,7 @@ async function onAdd(body) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Authorization':dataUser.accessToken,
+                'X-Authorization': dataUser.accessToken,
             },
             body: JSON.stringify(body)
         })
@@ -138,13 +116,11 @@ async function onAdd(body) {
     }
 
 }
-
-
 function createInfo(user) {
     const div = document.createElement('div');
     div.classList.add('catch');
     div.setAttribute('data-id', user._id);
-  
+
     div.innerHTML = `
     <label>Angler</label>
     <input type="text" class="angler" value="${user.angler}">
@@ -161,38 +137,26 @@ function createInfo(user) {
     <button class="update" data-id="${user._id}">Update</button>
     <button class="delete" data-id="${user._id}">Delete</button>
     `;
-  
+
     const hasPermission = dataUser && dataUser.id == user._ownerId;
-  
+
     if (!hasPermission) {
-      Array.from(div.children)
-        .filter((x) => x.nodeName == 'INPUT' || 'BUTTON')
-        .map((x) => (x.disabled = true));
+        Array.from(div.children)
+            .filter((x) => x.nodeName == 'INPUT' || 'BUTTON')
+            .map((x) => (x.disabled = true));
     }
     return div;
-  }
+}
 document.getElementById('logout').addEventListener('click', async (e) => {
-
     const url = `http://localhost:3030/users/logout`
-    const response = await fetch(url,{
+    const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'X-Authorization': dataUser.accessToken,
+            'Content-Type': "application/json",
+            'X-Authorization': dataUser.accessToken,
         },
-      })
+    })
     const data = await response.json();
     sessionStorage.clear();
     window.location = '/src/index.html'
 });
-
-function header(method, body) {
-    const accessToken = dataUser.accessToken
-    return {
-        method: `${method}`,
-        headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": `${dataUser.accessToken}`
-        },
-        body: JSON.stringify(body)
-    }
-}

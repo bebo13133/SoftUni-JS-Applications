@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../server"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "05.Fisher-Game",
+		"liveServer.settings.port": 5501
+	}
+}
