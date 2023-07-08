@@ -1,124 +1,129 @@
-const url = "http://localhost:3030/jsonstore/collections/books";
+const url = 'http://localhost:3030/jsonstore/collections/books';
+const table = document.querySelector('table tbody');
+const form = document.querySelector('form');
+const submitBtn = document.querySelector('form button');
+const h3 = document.querySelector('form h3');
+let saveId = '';
 
-const table = document.querySelector("tbody");
-const form = document.querySelector("form");
+document.getElementById('loadBooks').addEventListener('click', getBooksData);
+form.addEventListener('submit', submitData);
 
-const loadBtn = document.getElementById("loadBooks");
-form.addEventListener("submit", createOrEditBook);
+async function getBooksData() {
+  try {
+    const res = await fetch(url);
 
-loadBtn.addEventListener("click", loadBooks);
-
-async function createOrEditBook(e) {
-  e.preventDefault();
-
-  if (e.target.children[5].textContent === "Submit") {
-    const data = new FormData(e.currentTarget);
-    const author = data.get("author");
-    const title = data.get("title");
-
-    if (author == "" || title == "") {
-      return;
+    if (res.ok == false) {
+      const error = await res.json();
+      throw new Error(error.message);
     }
 
-    const body = JSON.stringify({
-      author,
-      title,
-    });
+    const data = await res.json();
+    table.replaceChildren();
 
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body,
-    });
-  } else if (e.target.children[5].textContent === "Save") {
-    const body = JSON.stringify({
-      author: form.children[4].value,
-      title: form.children[2].value,
-    });
+    const entries = Object.entries(data);
+    entries.forEach(([id, { author, title }]) => create(id, author, title));
+  } catch (err) {
+    alert(err.message);
+  }
+}
 
-    let el = [...document.querySelectorAll("tr")].find(
-      (k) =>
-        k.children[0].textContent == form.children[2].value ||
-        k.children[1].textContent == form.children[4].value
-    );
+async function submitData(e) {
+  e.preventDefault();
 
-    await fetch(`${url}/${el.getAttribute("key")}`, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-      },
-      body,
-    });
+  const formData = new FormData(e.target);
+  const { title, author } = Object.fromEntries(formData.entries());
 
-    form.children[0].textContent = "FORM";
-    form.children[5].textContent = "Submit";
+  if (title == '' || author == '') {
+    alert('All fields must be filled!');
+    return;
   }
 
-  [...form.querySelectorAll("input")].forEach((i) => (i.value = ""));
-}
-
-async function loadBooks(e) {
-  table.innerHTML = "";
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  Object.entries(data).forEach(([key, info]) => {
-    createTable([info.title, info.author], key);
-  });
-}
-
-async function editBook(e) {
-  form.children[0].textContent = "Edit FORM";
-  form.children[2].value =
-    e.currentTarget.parentNode.parentNode.children[0].textContent;
-  form.children[4].value =
-    e.currentTarget.parentNode.parentNode.children[1].textContent;
-  form.children[5].textContent = "Save";
-}
-
-async function deleteBook(e) {
-  const parent = e.target.parentNode.parentNode;
-
-  await fetch(`${url}/${parent.getAttribute("key")}`, {
-    method: "DELETE",
-    headers: {
-      "content-type": "application/json",
-    },
-  });
-
-  parent.remove();
-}
-
-function createTable(data, key) {
-  const tr = createElements("tr");
-  const btnEdit = createElements("button", "Edit");
-  const btnDelete = createElements("button", "Delete");
-  const tdBtns = createElements("td");
-
-  btnEdit.addEventListener("click", editBook);
-  btnDelete.addEventListener("click", deleteBook);
-
-  data.forEach((e) => {
-    const td = createElements("td", e);
-    tr.append(td);
-  });
-
-  tdBtns.append(btnEdit, btnDelete);
-  tr.append(tdBtns);
-  tr.setAttribute("key", key);
-
-  table.append(tr);
-}
-
-function createElements(el, text) {
-  let element = document.createElement(el);
-
-  if (text) {
-    element.textContent = text;
+  if (submitBtn.textContent == 'Save') {
+    editData({ author, title });
+    return;
   }
 
-  return element;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ author, title }),
+    });
+
+    if (res.ok == false) {
+      const error = await res.json();
+      throw new Error(error.message);
+    }
+
+    getBooksData();
+  } catch (err) {
+    alert(err.message);
+  }
+  form.reset();
+}
+
+async function editData(body) {
+  try {
+    const res = await fetch(`${url}/${saveId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok == false) {
+      const error = await res.json();
+      throw new Error(error.message);
+    }
+  } catch (err) {
+    alert(err.message);
+  }
+  h3.textContent = 'Edit';
+  submitBtn.textContent = 'Submit';
+  form.reset();
+  getBooksData();
+}
+
+function create(id, author, title) {
+  const tr = document.createElement('tr');
+  tr.id = id;
+
+  const td1 = document.createElement('td');
+  const td2 = document.createElement('td');
+  const td3 = document.createElement('td');
+
+  td1.textContent = author;
+  td2.textContent = title;
+
+  const editBtn = document.createElement('button');
+  const deleteBtn = document.createElement('button');
+  editBtn.textContent = 'Edit';
+  deleteBtn.textContent = 'Delete';
+
+  editBtn.addEventListener('click', () => onEdit(id));
+  deleteBtn.addEventListener('click', () => onDelete(id));
+
+  [editBtn, deleteBtn].forEach((x) => td3.appendChild(x));
+  [td2, td1, td3].forEach((x) => tr.appendChild(x));
+  table.appendChild(tr);
+}
+
+async function onDelete(id) {
+  await fetch(`${url}/${id}`, {
+    method: 'DELETE',
+  });
+  getBooksData();
+}
+
+function onEdit(id) {
+  saveId = id;
+  const element = document.getElementById(id).children;
+  const [title, author] = element;
+  h3.textContent = 'Edit FORM';
+  submitBtn.textContent = 'Save';
+  form.querySelector('input[name=author]').value = author.textContent;
+  form.querySelector('input[name=title]').value = title.textContent;
 }
