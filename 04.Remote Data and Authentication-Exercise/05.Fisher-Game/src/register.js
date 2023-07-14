@@ -36,7 +36,7 @@ function onCheck(e){
           }
       
           if (info.password !== info.rePass) {
-            throw new Error('Passwords don\'t match');
+            alert('Passwords don\'t match');
 
           }
       

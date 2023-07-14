@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\04.Remote Data and Authentication-Exercise\\01.Messenger\\app.js"
+            "program": "${workspaceFolder}"
         }
     ]
 }

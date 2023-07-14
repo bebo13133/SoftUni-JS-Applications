@@ -14,5 +14,8 @@
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "playwright-chromium": "^1.35.1"
+  },
+  "dependencies": {
+    "lit": "^2.7.6"
   }
 }

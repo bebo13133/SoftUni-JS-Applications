@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "chai": "^4.3.7",
+    "html-server": "^0.1.1",
+    "http-server": "^14.1.1",
+    "lit-html": "^2.7.5",
+    "mocha": "^10.2.0"
+  },
+  "name": "02.http-status-cats",
+  "version": "1.0.0",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "http-server -a localhost -p 3000 -P http://localhost:3000? -c-1",
+    "test": "mocha tests"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
