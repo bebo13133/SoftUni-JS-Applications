@@ -12,7 +12,7 @@ ${data.map((cat) => html`
                 <button class="showBtn" @click=${(e) => onShow(e, cat)}>${cat.action} status code</button>
                 <div class="status" style="${styleMap({display: cat.action == 'Show'? 'none':'block'})}" id="${cat.id}">
                     <h4 class="card-title">Status Code: ${cat.statusCode}</h4>
-                    <p> class="card-text">${cat.statusMessage}</p>
+                    <p class="card-text">${cat.statusMessage}</p>
                 </div>
             </div>
     </li>
