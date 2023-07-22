@@ -6,7 +6,7 @@
     "lit-html": "^2.7.5",
     "mocha": "^10.2.0"
   },
-  "name": "02.http-status-cats",
+  "name": "03.search-in-list",
   "version": "1.0.0",
   "main": "app.js",
   "directories": {
