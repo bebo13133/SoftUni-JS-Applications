@@ -23,7 +23,6 @@ async function addItem(info) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(body)
     })
- const data = await response.json()
  form.reset()
  render(townTemplate(await getTown()),menu)
 }
