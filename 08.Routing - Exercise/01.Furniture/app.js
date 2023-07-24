@@ -3,7 +3,7 @@ import page from '/node_modules/page/page.mjs'
 import { catalogView } from './views/catalog.js'
 import { registerView } from './views/register.js'
 import { loginView } from './views/login.js'
-import {editView} from './views/edit.js'
+import { editView } from './views/edit.js'
 import { createView } from './views/create.js'
 import { logoutView } from './views/logout.js'
 import { detailsViews } from './views/details.js'
@@ -12,16 +12,16 @@ import { myFurnitureView } from './views/myFurniture.js'
 
 document.getElementById('logoutBtn').addEventListener('click', logoutView)
 
-export function updateNavi(){
+export function updateNavi() {
     const guest = document.getElementById('guest')
     const user = document.getElementById('user')
     const userData = JSON.parse(sessionStorage.getItem('userData'))
-    if(userData){
+    if (userData) {
         user.style.display = "inline-block"
-        guest.style.display = 'none' 
-    }else{
+        guest.style.display = 'none'
+    } else {
         user.style.display = "none"
-        guest.style.display = 'inline-block' 
+        guest.style.display = 'inline-block'
     }
 }
 updateNavi()
